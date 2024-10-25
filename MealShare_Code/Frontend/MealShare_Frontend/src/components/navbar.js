@@ -1,7 +1,10 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   return React.createElement(
     AppBar,
     {
@@ -10,9 +13,9 @@ const Navbar = () => {
       elevation: 0,
       sx: {
         width: "100%",
-        mt: 3,
-        bgcolor: "rgba(18, 18, 18, 0.8)", // Dark semi-transparent background
-        backdropFilter: "blur(8px)", // Adds a blur effect
+        mt: 2,
+        bgcolor: "rgba(18, 18, 18, 0.8)",
+        backdropFilter: "blur(8px)",
       },
     },
     React.createElement(
@@ -28,7 +31,11 @@ const Navbar = () => {
         {
           variant: "h6",
           component: "div",
-          sx: { fontWeight: "bold" },
+          sx: {
+            fontWeight: "bold",
+            cursor: "pointer",
+          },
+          onClick: () => navigate("/"),
         },
         "Logo"
       ),
@@ -39,6 +46,7 @@ const Navbar = () => {
           Button,
           {
             color: "inherit",
+            onClick: () => navigate("/login"),
             sx: {
               mr: 1,
               "&:hover": {
@@ -52,6 +60,7 @@ const Navbar = () => {
           Button,
           {
             color: "inherit",
+            onClick: () => navigate("/register"),
             sx: {
               "&:hover": {
                 bgcolor: "rgba(255, 255, 255, 0.1)",
