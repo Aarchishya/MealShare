@@ -15,6 +15,7 @@ import {
   Grid,
 } from "@mui/material";
 import Navbar from "../components/navbar";
+import bgimage from "../assets/imgs/bgimage.avif";
 
 const theme = createTheme({
   palette: {
@@ -24,6 +25,20 @@ const theme = createTheme({
     },
     background: {
       default: "transparent",
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundImage: `url(${bgimage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+          minHeight: "100vh",
+        },
+      },
     },
   },
 });
@@ -128,7 +143,6 @@ const RegisterPage = () => {
     e.preventDefault();
     if (validateForm()) {
       console.log("Form submitted:", formData);
-      // Add your registration logic here
     }
   };
 

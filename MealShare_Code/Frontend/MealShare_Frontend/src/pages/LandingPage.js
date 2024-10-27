@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { ArrowForward } from "@mui/icons-material";
 import Navbar from "../components/navbar";
-import bgimage from "../assets/imgs/bgimage.avif"; // Correct import statement
+import bgimage from "../assets/imgs/bgimage.avif";
 
 const theme = createTheme({
   palette: {
@@ -26,7 +26,7 @@ const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundImage: `url(${bgimage})`, // Use the imported image
+          backgroundImage: `url(${bgimage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
