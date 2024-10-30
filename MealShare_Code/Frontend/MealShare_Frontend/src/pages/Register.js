@@ -16,6 +16,8 @@ import {
 } from "@mui/material";
 import Navbar from "../components/navbar";
 import bgimage from "../assets/imgs/bgimage.avif";
+import authService from "../appwrite/auth"; // Import authService
+
 
 const theme = createTheme({
   palette: {
@@ -54,7 +56,7 @@ const RegisterPage = () => {
     role: "",
   });
 
-  const [errors, setErrors] = useState({
+  /*const [errors, setErrors] = useState({
     name: "",
     email: "",
     password: "",
@@ -62,11 +64,14 @@ const RegisterPage = () => {
     address: "",
     city: "",
     role: "",
-  });
+  });*/
+
+  const [errors, setErrors] = useState({});
+  const [formSubmitting, setFormSubmitting] = useState(false);
 
   const validateForm = () => {
     let isValid = true;
-    const newErrors = {
+    /*const newErrors = {
       name: "",
       email: "",
       password: "",
@@ -74,7 +79,9 @@ const RegisterPage = () => {
       address: "",
       city: "",
       role: "",
-    };
+    };*/
+
+    const newErrors = {};
 
     // Name validation
     if (!formData.name.trim()) {
@@ -139,12 +146,52 @@ const RegisterPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", formData);
+      setFormSubmitting(true);
+      try {
+        /*await authService.createAccount({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          address: formData.address,
+          city: formData.city,
+          role: formData.role,
+        });*/
+        const formValues = {
+          name: formData.name, // assuming you have state variables for these
+          email: formData.email,
+          password: formData.password,
+          address: formData.address,
+          city: formData.city,
+          role: formData.role
+        };
+        console.log("Form data being sent:", formValues); // Log the form data
+        await authService.createAccount(formValues); 
+        alert("Registration successful!");
+      } catch (error) {
+        console.log("Registration failed:", error.message || error);
+        //console.error("Registration failed:", error);
+        //alert("Registration failed. Please try again.");
+      } finally {
+        setFormSubmitting(false);
+      }
+      //console.log("Form submitted:", formData);
     }
   };
+
+  const handleLogout = async () => {
+    try {
+        await account.deleteSession('current'); // 'current' refers to the active session
+        console.log("Logout successful");
+        alert("You have been logged out successfully.");
+        // Optionally, redirect the user or update the UI state
+    } catch (error) {
+        console.error("Logout failed:", error);
+        alert("Logout failed: " + error.message);
+    }
+};
 
   return React.createElement(
     ThemeProvider,

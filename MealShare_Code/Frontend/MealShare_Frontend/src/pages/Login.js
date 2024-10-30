@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Box,
@@ -15,6 +16,8 @@ import {
 } from "@mui/material";
 import Navbar from "../components/navbar";
 import bgimage from "../assets/imgs/bgimage.avif";
+import { Client, Account } from "appwrite"; // Import Appwrite
+import conf from '../conf/conf.js';
 
 const theme = createTheme({
   palette: {
@@ -42,7 +45,16 @@ const theme = createTheme({
   },
 });
 
+
+const client = new Client();
+const account = new Account(client);
+
+client
+  .setEndpoint(conf.appWriteUrl) // Your Appwrite endpoint
+  .setProject(conf.appWriteProjectId); // Your project ID
+
 const LoginPage = () => {
+  const navigate = useNavigate();
   // State for form data
   const [formData, setFormData] = useState({
     email: "",
@@ -100,11 +112,63 @@ const LoginPage = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  /*const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", formData);
+      try {
+        console.log("Submitting login with:", formData);
+
+        // Check if the user is already logged in
+        const currentUser  = await account.get();
+        console.log("Current user:", currentUser );
+        alert("You are already logged in as " + currentUser .email);
+        return; // Exit the function if the user is already logged in
+
+        //const response = await account.createSession(formData.email);
+        //const response = await account.create(formData.email, formData.password, formData.name);
+        const response = await account.createEmailPasswordSession(formData.email, formData.password);
+        console.log("Login successful:", response);
+        alert("Login successful :)");
+      } catch (error) {
+        alert("Login failed :/");
+        console.log("login failed :/", error);
+        setErrors((prev) => ({ ...prev, email: "Login failed. Please check your credentials." }));
+      }
+      //console.log("Form submitted:", formData);
       // Add your login logic here
+    }
+  };*/
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (validateForm()) {
+      try {
+        console.log("Submitting login with:", formData);
+        // Check if the user is already logged in
+        const currentUser  = await account.get();
+        console.log("Current user:", currentUser );
+        alert("You are already logged in as " + currentUser .email);
+        navigate('/dashboard'); // Redirect to dashboard if already logged in
+        return; // Exit the function if the user is already logged in
+        } catch (error) {
+          // If there's an error fetching the current user, it means no active session
+          if (error.code === 401) { // 401 Unauthorized error means no active session
+            try {
+              // Attempt to log in
+              const response = await account.createEmailPasswordSession(formData.email, formData.password);
+              console.log("Login successful:", response);
+              alert("Login successful :)");
+            } catch (loginError) {
+              console.error("Login failed:", loginError);
+              alert("Login failed: " + loginError.message);
+              setErrors((prev) => ({ ...prev, email: "Login failed. Please check your credentials." }));
+              }
+            } else {
+              console.error("Error checking current user:", error);
+              alert("An error occurred while checking the current user.");
+            }
+        }
     }
   };
 
