@@ -4,6 +4,7 @@ import "./App.css";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
+import DashboardPage from "./pages/Dashboard";
 
 function App() {
   return React.createElement(
@@ -23,6 +24,10 @@ function App() {
       React.createElement(Route, {
         path: "/register",
         element: React.createElement(RegisterPage),
+      }),
+      React.createElement(Route, {
+        path: "/dashboard",
+        element: React.createElement(DashboardPage),
       })
     )
   );
